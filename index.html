@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="kennel.css">
+    <title>Kennel Live Renderer</title>
+    <script src="bundle.js"></script> <!-- browserify wrapper.js -o bundle.js -->
+    <style type="text/css">
+        html, body {
+            margin: 0;
+        }
+        #root {
+            display: grid;
+            grid-template-columns: 100% 100%;
+            width: 50vw;
+            height: 100vh;
+        }
+        #root > .grid {
+            border: none;
+            margin: 0;
+            padding: 10px;
+        }
+        #kennelIn {
+            background: #202020;
+            color: white;
+        }
+        #kennelOut {
+            background: #161616;
+            color: white;
+            overflow: auto;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <textarea class="grid" id="kennelIn">{
+  "minVersion": "0.1",
+  "tintColor": "#33dd33",
+  "tabs": [
+    {
+      "tabname": "Details",
+      "views": [
+        {
+          "class": "DepictionHeaderView",
+          "title": "Welcome to Kennel Renderer!"
+        },
+        {
+            "class": "DepictionMarkdownView",
+            "markdown": "Type in any valid native depiction code here and watch it get rendered!"
+        },
+        {
+            "class": "DepictionTableButtonView",
+            "title": "View Depiction Documentation",
+            "action": "https://developer.getsileo.app/native-depictions",
+            "openExternal": 1
+        }
+      ],
+      "class": "DepictionStackView"
+    }
+  ],
+  "class": "DepictionTabView"
+}</textarea>
+        <div class="grid" id="kennelOut">
+
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    let isTyping = 9999;
+    setInterval(()=>{
+        if (--isTyping <= 0) {
+            update();
+            isTyping = 9999;
+        }
+    }, 10);
+
+    function ndChangeTab(show, hide) {
+        let i;
+        // Hide elements.
+        for (i = 0; i < document.querySelectorAll(`${hide}.nd_tab`).length; i++) {
+            document.querySelectorAll(`${hide}.nd_tab`)[i].classList.add("nd_hidden");
+            document.querySelectorAll(`${hide}.nd_nav_btn`)[i].classList.remove("nd_active");
+        }
+        // Show elements.
+        for (i = 0; i < document.querySelectorAll(`${show}.nd_tab`).length; i++) {
+            document.querySelectorAll(`${show}.nd_tab`)[i].classList.remove("nd_hidden");
+            document.querySelectorAll(`${show}.nd_nav_btn`)[i].classList.add("nd_active");
+        }
+    }
+
+    function update() {
+        try {
+            const nd = new Kennel(JSON.parse(document.getElementById("kennelIn").value));
+            document.getElementById("kennelOut").innerHTML = nd.render();
+        } catch(err) {
+            document.getElementById("kennelOut").innerHTML = `<div style="color: red; opacity: 0.5"><b>Error: </b> ${err}</div>`;
+        }
+    }
+
+    document.getElementById("kennelIn").onkeyup = () => {isTyping = 60};
+    update();
+</script>
+</html>
