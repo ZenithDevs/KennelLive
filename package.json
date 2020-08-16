@@ -1,0 +1,11 @@
+{
+  "name": "kennellive",
+  "version": "1.0.0",
+  "description": "A live editor for native depictions, powered by Kennel.",
+  "main": "",
+  "author": "Shuga",
+  "license": "MIT",
+  "dependencies": {
+    "@zenithdevs/kennel": "^1.1.10"
+  }
+}
