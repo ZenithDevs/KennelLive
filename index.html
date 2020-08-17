@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="kennel.css">
     <title>Kennel Live Renderer</title>
     <script src="bundle.js"></script> <!-- browserify wrapper.js -o bundle.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js"></script>
     <style type="text/css">
         html, body {
             margin: 0;
@@ -34,7 +35,7 @@
 </head>
 <body>
     <div id="root">
-        <textarea class="grid" id="kennelIn">{
+        <div class="grid" id="kennelIn">{
   "minVersion": "0.1",
   "tintColor": "#33dd33",
   "tabs": [
@@ -60,7 +61,7 @@
     }
   ],
   "class": "DepictionTabView"
-}</textarea>
+}</div>
         <div class="grid" id="kennelOut">
 
         </div>
@@ -91,12 +92,17 @@
 
     function update() {
         try {
-            const nd = new Kennel(JSON.parse(document.getElementById("kennelIn").value));
+            const nd = new Kennel(JSON.parse(editor.getValue()));
             document.getElementById("kennelOut").innerHTML = nd.render();
         } catch(err) {
             document.getElementById("kennelOut").innerHTML = `<div style="color: red; opacity: 0.5"><b>Error: </b> ${err}</div>`;
         }
     }
+
+    // Set up text editor (Ace)
+    const editor = ace.edit("kennelIn");
+    editor.session.setMode("ace/mode/json");
+    editor.setTheme("ace/theme/nord_dark");
 
     document.getElementById("kennelIn").onkeyup = () => {isTyping = 60};
     update();
