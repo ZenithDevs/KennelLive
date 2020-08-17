@@ -35,33 +35,7 @@
 </head>
 <body>
     <div id="root">
-        <div class="grid" id="kennelIn">{
-  "minVersion": "0.1",
-  "tintColor": "#33dd33",
-  "tabs": [
-    {
-      "tabname": "Details",
-      "views": [
-        {
-          "class": "DepictionHeaderView",
-          "title": "Welcome to Kennel Live Renderer!"
-        },
-        {
-            "class": "DepictionMarkdownView",
-            "markdown": "Type in any valid native depiction code here and watch it get rendered!"
-        },
-        {
-            "class": "DepictionTableButtonView",
-            "title": "View Depiction Documentation",
-            "action": "https://developer.getsileo.app/native-depictions",
-            "openExternal": 1
-        }
-      ],
-      "class": "DepictionStackView"
-    }
-  ],
-  "class": "DepictionTabView"
-}</div>
+        <div class="grid" id="kennelIn"></div>
         <div class="grid" id="kennelOut">
 
         </div>
@@ -97,12 +71,47 @@
         } catch(err) {
             document.getElementById("kennelOut").innerHTML = `<div style="color: red; opacity: 0.5"><b>Error: </b> ${err}</div>`;
         }
+        localStorage.setItem("data", editor.getValue())
     }
 
     // Set up text editor (Ace)
     const editor = ace.edit("kennelIn");
     editor.session.setMode("ace/mode/json");
     editor.setTheme("ace/theme/nord_dark");
+
+    // Restore text
+    const oldData = localStorage.getItem("data")
+    if (oldData) {
+        editor.setValue(oldData)
+    } else {
+        editor.setValue(JSON.stringify({
+            "minVersion": "0.1",
+            "tintColor": "#33dd33",
+            "tabs": [
+                {
+                    "tabname": "Details",
+                    "views": [
+                {
+                    "class": "DepictionHeaderView",
+                    "title": "Welcome to Kennel Live Renderer!"
+                },
+                {
+                    "class": "DepictionMarkdownView",
+                    "markdown": "Type in any valid native depiction code here and watch it get rendered!"
+                },
+                {
+                    "class": "DepictionTableButtonView",
+                    "title": "View Depiction Documentation",
+                    "action": "https://developer.getsileo.app/native-depictions",
+                    "openExternal": 1
+                }
+                ],
+                    "class": "DepictionStackView"
+                }
+            ],
+            "class": "DepictionTabView"
+        }, null, 4))
+    }
 
     document.getElementById("kennelIn").onkeyup = () => {isTyping = 60};
     update();
