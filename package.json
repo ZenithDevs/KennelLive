@@ -6,6 +6,6 @@
   "author": "Shuga",
   "license": "MIT",
   "dependencies": {
-    "@zenithdevs/kennel": "^1.1.10"
+    "@zenithdevs/kennel": "^1.2.2"
   }
 }
